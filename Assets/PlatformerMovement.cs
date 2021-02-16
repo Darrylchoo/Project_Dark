@@ -2,11 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PlatformerMovement : MonoBehaviour
 {
     //Movement Field
     [SerializeField] private float moveSpeed;
+    public KeyCode jump;
+    public KeyCode down;
+    public bool P1;
+    public bool P2;
     private float moveX;
 
     //JumpField
@@ -42,6 +47,7 @@ public class PlatformerMovement : MonoBehaviour
     [SerializeField] private Collider2D platformCollider;
     [SerializeField] private Collider2D hitCollider;
 
+    private PlatformerInteraction pi;
     
     // Start is called before the first frame update
     void Start()
@@ -51,6 +57,8 @@ public class PlatformerMovement : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>() ? GetComponent<SpriteRenderer>() : null;
 
         initGravity = rb.gravityScale;
+
+        pi = GetComponent<PlatformerInteraction>();
     }
 
     // Update is called once per frame
@@ -60,7 +68,6 @@ public class PlatformerMovement : MonoBehaviour
         PlatformCheck();
 
         //Movement Input
-        MovementInput();
         JumpInput();
         LadderInput();
         OneWayPlatformInput();
@@ -72,29 +79,35 @@ public class PlatformerMovement : MonoBehaviour
     {
         if (onPlatform)
         {
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(down))
             {
-                StartCoroutine(ResetPlatformCheck());
-                platformCollider.enabled = false;
+                if (!pi.canInteract)
+                {
+                    StartCoroutine(ResetPlatformCheck());
+                    platformCollider.enabled = false;
+                }
             }
         }
     }
-
-    private void MovementInput()
-    {
-        moveX = Input.GetAxisRaw("Horizontal") * moveSpeed;
-    }
-
   
     private void Movement()
     {
-        float xVelo = moveX * Time.deltaTime;
-        rb.velocity = new Vector2(moveX, rb.velocity.y);
+        if (P1)
+        {
+            moveX = Input.GetAxisRaw("Horizontal_P1") * moveSpeed;
+            rb.velocity = new Vector2(moveX, rb.velocity.y);
+        }
+        else if (P2)
+        {
+            moveX = Input.GetAxisRaw("Horizontal_P2") * moveSpeed;
+            rb.velocity = new Vector2(moveX, rb.velocity.y);
+        }
+        //float xVelo = moveX * Time.deltaTime;
     }
 
     private void JumpInput()
     {
-        if (Input.GetKeyDown(KeyCode.W) && !onLadder)
+        if (Input.GetKeyDown(jump) && !onLadder)
         {
             Jump();
         }
@@ -105,11 +118,11 @@ public class PlatformerMovement : MonoBehaviour
         if (onLadder)
         {
             platformCollider.enabled = false;
-            if (Input.GetKey(KeyCode.W))
+            if (Input.GetKey(jump))
             {
                 rb.velocity = new Vector2(rb.velocity.x, climbSpeed);
             }
-            else if (Input.GetKey(KeyCode.S) && ladderBelow)
+            else if (Input.GetKey(down) && ladderBelow)
             {
                 rb.velocity = new Vector2(rb.velocity.x, -climbSpeed);
             }
@@ -128,7 +141,7 @@ public class PlatformerMovement : MonoBehaviour
 
         if (ladderBelow)
         {
-            if (Input.GetKey(KeyCode.S) && !onLadder)
+            if (Input.GetKey(down) && !onLadder)
             {
                 platformCollider.enabled = false;
                 rb.velocity = new Vector2(rb.velocity.x, -climbSpeed);
@@ -155,7 +168,6 @@ public class PlatformerMovement : MonoBehaviour
         {
             onPlatform = false;
         }
-
     }
 
     private void GroundCheck()
@@ -196,6 +208,5 @@ public class PlatformerMovement : MonoBehaviour
         jumpingThroughPlatform = true;
         yield return new WaitForSeconds(jumpThroughDelay);
         jumpingThroughPlatform = false;
-
     }
 }

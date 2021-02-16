@@ -6,6 +6,7 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class CustomTorch : MonoBehaviour
 {
+    [SerializeField] private KeyCode torchKey;
     [SerializeField] private GameObject selfLight;
     [SerializeField] private Light2D torch;
     [SerializeField] private float torchRange;
@@ -54,7 +55,7 @@ public class CustomTorch : MonoBehaviour
 
     private void Torch()
     {
-        if (Input.GetKey(KeyCode.F) && !outOfBattery)
+        if (Input.GetKey(torchKey) && !outOfBattery)
         {
             TorchRange();
             selfLight.SetActive(true);

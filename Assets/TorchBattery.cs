@@ -13,6 +13,8 @@ public class TorchBattery : MonoBehaviour
     public float maxTorchBattery;
     public float currentPercentage;
     public float drainRate;
+    public float chargeRate;
+    public bool canCharge = false;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,20 @@ public class TorchBattery : MonoBehaviour
 
         currentPercentage = (torchBattery / maxTorchBattery) * 100;
 
-        batteryText.text = "Battery - " + (int)currentPercentage + " %";
+        batteryText.text = "Battery - " + (int)currentPercentage + "%";
+    }
+
+    public void Recharge()
+    {
+        if (torchBattery < maxTorchBattery)
+        {
+            canCharge = true;
+            torchBattery += chargeRate;
+
+            if (torchBattery > maxTorchBattery) torchBattery = maxTorchBattery;
+        }
+
+        currentPercentage = (torchBattery / maxTorchBattery) * 100;
+        batteryText.text = "Battery - " + (int)currentPercentage + "%";
     }
 }

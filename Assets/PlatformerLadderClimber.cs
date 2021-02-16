@@ -22,7 +22,7 @@ public class PlatformerLadderClimber : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Collider2D ladder = Physics2D.OverlapBox(transform.position + upperLadderOffset, upperLadderSize, 0,ladderLayer);
+        Collider2D ladder = Physics2D.OverlapBox(transform.position + upperLadderOffset, upperLadderSize, 0, ladderLayer);
 
         RaycastHit2D lowerLadder = Physics2D.Raycast(transform.position + lowerLadderOffset, -transform.up, lowerLadderRadius, ladderLayer);
      

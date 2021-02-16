@@ -14,10 +14,13 @@ public class PlatformerPlayerSprite : MonoBehaviour
     public FacingDirection currentFacingDirection;
 
     private Vector3 lastCoordinate;
+    private PlatformerMovement pm;
 
     // Update is called once per frame
     void Update()
     {
+        pm = GetComponent<PlatformerMovement>();
+
         //CHECK IF LAST POSITION IS TOWARDS THE LEFT OF CURRENT POSITION
         CheckHeadingDirection();
         FlipSprite();
@@ -25,10 +28,21 @@ public class PlatformerPlayerSprite : MonoBehaviour
 
     private void CheckHeadingDirection()
     {
-        float input = Input.GetAxisRaw("Horizontal");
-        if (input != 0)
+        if (pm.P1)
         {
-            currentFacingDirection = input > 0 ? FacingDirection.RIGHT : FacingDirection.LEFT;
+            float input = Input.GetAxisRaw("Horizontal_P1");
+            if (input != 0)
+            {
+                currentFacingDirection = input > 0 ? FacingDirection.RIGHT : FacingDirection.LEFT;
+            }
+        }
+        else if (pm.P2)
+        {
+            float input = Input.GetAxisRaw("Horizontal_P2");
+            if (input != 0)
+            {
+                currentFacingDirection = input > 0 ? FacingDirection.RIGHT : FacingDirection.LEFT;
+            }
         }
     }
 
