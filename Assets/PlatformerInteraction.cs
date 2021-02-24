@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 public class PlatformerInteraction : MonoBehaviour
 {
     [SerializeField] private TorchBattery torch;
+    [SerializeField] private SpawnManager sm;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private Vector2 interactableSize;
     [SerializeField] private Vector3 interactableOffset;
@@ -43,7 +44,11 @@ public class PlatformerInteraction : MonoBehaviour
         if (Input.GetKeyDown(pm.down))
         {
             if (canInteract)
-                Interaction();
+            {
+                //Interaction();
+                Destroy(interaction.transform.gameObject);
+                sm.crateNum--;
+            }
         }
     }
 
