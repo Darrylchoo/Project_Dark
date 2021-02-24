@@ -29,7 +29,6 @@ public class SpawnManager : MonoBehaviour
         }
 
         spawnAll = true;
-        Debug.Log(spawnAll);
     }
 
     // Update is called once per frame
@@ -55,7 +54,6 @@ public class SpawnManager : MonoBehaviour
                 if (isMax) 
                 {
                     spawnAll = false;
-                    Debug.Log(spawnAll);
                     return;
                 }
 
@@ -89,7 +87,6 @@ public class SpawnManager : MonoBehaviour
             {
                 isMax = false;
                 spawnOne = true;
-                Debug.Log("vmldfkmv");
                 rememberSpawnTimer = spawnTimer;
             }
         }
