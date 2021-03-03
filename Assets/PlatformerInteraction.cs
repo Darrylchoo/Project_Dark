@@ -1,36 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class PlatformerInteraction : MonoBehaviour
 {
-    [SerializeField] private TorchBattery torch;
     [SerializeField] private SpawnManager sm;
+    [SerializeField] private GameObject itemManager;
     [SerializeField] private LayerMask interactableLayer;
     [SerializeField] private Vector2 interactableSize;
     [SerializeField] private Vector3 interactableOffset;
 
-    public Collider2D interaction;
+    public GameObject battery;
+    public GameObject[] randomItems;
+    private GameObject item;
 
     //Interaction Field
     public bool canInteract = false;
-    public Tile itemTile;
-    private Tilemap interactableTile;
-    private Vector3Int currentTile;
-
-    private PlatformerMovement pm;
+    public bool interactItem;
+    public GameObject interactedItem;
 
     // Start is called before the first frame update
     void Start()
     {
-        pm = GetComponent<PlatformerMovement>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        interaction = Physics2D.OverlapBox(transform.position + interactableOffset, interactableSize, 0, interactableLayer);
+        Collider2D interaction = Physics2D.OverlapBox(transform.position + interactableOffset, interactableSize, 0, interactableLayer);
 
         if (interaction)
         {
@@ -41,36 +39,38 @@ public class PlatformerInteraction : MonoBehaviour
             canInteract = false;
         }
 
-        if (Input.GetKeyDown(pm.down))
+        if (canInteract)
         {
-            if (canInteract)
+            if (interaction.transform.gameObject.GetComponent<Crate>().hasLight)
             {
-                //Interaction();
-                Destroy(interaction.transform.gameObject);
-                sm.crateNum--;
+                item = Instantiate(battery, interaction.transform.position, Quaternion.identity);
+                item.transform.SetParent(itemManager.transform);
             }
+            else
+            {
+                //int index = Random.Range(0, randomItems.Length);
+                //item = Instantiate(randomItems[index], interaction.transform.position, Quaternion.identity);
+                //item.transform.SetParent(itemManager.transform);
+            }
+
+            Destroy(interaction.transform.gameObject);
+            sm.crateNum--;
         }
     }
 
-    private void Interaction()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        interactableTile = interaction.transform.GetComponent<Tilemap>();
-        currentTile = interactableTile.WorldToCell(transform.position);
-
-        if (interactableTile.GetTile(currentTile) != itemTile)
+        if (collision.gameObject.CompareTag("Interactable"))
         {
-            interactableTile.SetTile(currentTile, itemTile);
+            interactItem = true;
+            interactedItem = collision.gameObject;
         }
-        else
-        {
-            torch.Recharge();
+    }
 
-            if (torch.canCharge)
-            {
-                torch.canCharge = false;
-                interactableTile.SetTile(currentTile, null);
-            }
-        }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        interactItem = false;
+        interactedItem = null;
     }
 
     private void OnDrawGizmosSelected()

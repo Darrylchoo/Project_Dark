@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private GameObject[] crateTypes;
+    [SerializeField] private GameObject[] crates;
     [SerializeField] private float spawnTimer;
 
     public int crateNum;
@@ -43,7 +43,7 @@ public class SpawnManager : MonoBehaviour
         while (crateNum < maxCrate && spawnOne)
         {
             spawnIndex = Random.Range(0, spawnPoints.Length);
-            crateIndex = Random.Range(0, crateTypes.Length);
+            crateIndex = Random.Range(0, crates.Length);
 
             if (spawnPoints[spawnIndex].transform.childCount > 0)
             {
@@ -57,7 +57,7 @@ public class SpawnManager : MonoBehaviour
                     return;
                 }
 
-                crate = Instantiate(crateTypes[crateIndex], spawnPoints[spawnIndex].position, Quaternion.identity);
+                crate = Instantiate(crates[crateIndex], spawnPoints[spawnIndex].position, Quaternion.identity);
                 crate.transform.SetParent(spawnPoints[spawnIndex]);
                 crateNum++;
 

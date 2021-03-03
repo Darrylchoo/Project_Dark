@@ -194,4 +194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9daab4a55cf56bd4ebcb5aa836e2d6a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pi: {fileID: 0}
+  battery: {fileID: 5841707422901930492, guid: b9eb1bed919f298448d060ed84eb63fd, type: 3}
+  randomItems: []
   hasLight: 1
