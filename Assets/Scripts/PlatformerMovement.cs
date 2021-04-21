@@ -13,6 +13,7 @@ public class PlatformerMovement : NetworkBehaviour
 
     //Movement Field
     [SerializeField] private float moveSpeed;
+    public bool moving;
     private Vector2 currentSpeed;
 
     //External Force
@@ -112,6 +113,11 @@ public class PlatformerMovement : NetworkBehaviour
     private void Movement()
     {
         currentSpeed = new Vector2(input.movementInput.x * moveSpeed, rb.velocity.y);
+
+        if (input.movementInput.x == 0)
+            moving = false;
+        else
+            moving = true;
     }
 
     private void CalculateVelocity()
